@@ -1,0 +1,4 @@
+interface:
+  display_name: "TTS Script to Audio"
+  short_description: "Generate audio files from TTS narration scripts"
+  default_prompt: "Use $tts-script-to-audio to turn these episode narration scripts into generated audio files."

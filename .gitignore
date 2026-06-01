@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.wav
+*.mp3
+*.csv
+*.log
+outputs/
+work/

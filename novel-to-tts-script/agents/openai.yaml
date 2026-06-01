@@ -1,0 +1,4 @@
+interface:
+  display_name: "Novel to TTS Script"
+  short_description: "Turn novel chapters into TTS narration scripts"
+  default_prompt: "Use $novel-to-tts-script to turn this novel chapter into clean episode-based TTS narration scripts."
