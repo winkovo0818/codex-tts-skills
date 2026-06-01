@@ -31,6 +31,7 @@ def chinese_num_to_int(value: str) -> int:
 
 def clean_text(text: str) -> str:
     text = re.sub(r"```.*?```", "", text, flags=re.S)
+    text = re.sub(r"^TTS(?:导演提示|方向|指令)?[：:].*$", "", text, flags=re.M)
     text = re.sub(r"^\s{0,3}#{1,6}\s*", "", text, flags=re.M)
     text = re.sub(r"^\s*[-*+]\s+", "", text, flags=re.M)
     text = text.replace("|", " ")

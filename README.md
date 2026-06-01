@@ -24,6 +24,7 @@ Use it when you have a chapter, outline, or scene and want Codex to:
 
 - split the chapter into episodes;
 - rewrite literary prose into spoken narration;
+- decide per-episode TTS tone, rhythm, pause, and emotion direction;
 - create strong openings and cliffhangers;
 - keep each episode suitable for TTS;
 - output only text that can later be turned into audio.
@@ -44,6 +45,7 @@ Converts episode narration scripts into generated audio files.
 Use it after `novel-to-tts-script` when you want Codex to:
 
 - extract only the spoken text;
+- extract per-episode TTS director prompts and pass them to providers such as MiMo;
 - preserve episode structure;
 - split long narration into manageable audio segments;
 - generate stable filenames;

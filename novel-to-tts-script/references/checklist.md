@@ -22,6 +22,8 @@ Use this checklist before delivering a short-video adaptation package.
 
 - Title and cover text sell the same core conflict.
 - The spoken text can be copied directly into a TTS tool.
+- Each episode has a concrete TTS director prompt covering tone, pacing, pauses, and emotion.
+- The director prompt can be passed to `tts-script-to-audio` or a provider such as MiMo without rewriting.
 - No visual directions are included unless explicitly requested.
 - The next TTS production skill can parse each episode's口播稿 cleanly.
 - AI/TTS usage is disclosed or label-ready where platform rules require it.

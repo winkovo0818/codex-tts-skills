@@ -40,11 +40,12 @@ Prefer making an immediately usable script package over giving generic advice. I
    - Favor actions, dialogue, and consequence over exposition.
    - Replace dense names/titles with clear repeated references if the listener may be confused.
    - Use punctuation to guide TTS breathing: short commas, full stops, and paragraph breaks.
+   - Decide the voice direction while cutting the script: tone, tempo, pauses, intensity, and emotional arc.
 
 4. Add TTS text package.
    - Title: 3-5 options with conflict, identity, or reversal.
    - Cover text: 6-12 Chinese characters, punchy and readable.
-   - TTS direction: voice type, emotion curve, speed, pauses, and emphasized words.
+   - TTS direction: per-episode voice type, emotion curve, speed, pauses, and emphasized words. This should be usable as the next skill's provider style prompt.
    - Clean口播稿: no markdown inside spoken text, one breath unit per line.
    - Compliance notes: mark AI/TTS use where platform rules require it; avoid unauthorized voices or copied footage.
 
@@ -65,13 +66,13 @@ Use this format for a full chapter adaptation:
 建议切分：
 
 **分集地图**
-| 集数 | 时长 | 剧情功能 | 开头钩子 | 结尾悬念 |
-|---|---:|---|---|---|
+| 集数 | 时长 | 剧情功能 | 开头钩子 | 语气节奏 | 结尾悬念 |
+|---|---:|---|---|---|---|
 
 **第1集成片脚本**
 标题：
 封面字：
-TTS：
+TTS导演提示：
 口播稿：
 
 **后续分集脚本**
@@ -107,6 +108,30 @@ Do not invent facts that contradict the chapter. If creating a cold open from a 
 - Keep one signature line per episode that could become a comment quote.
 - Add pause markers only when useful: `[停顿]`, `[压低声音]`, `[加重]`.
 - Avoid emoji and excessive punctuation in scripts intended for TTS.
+
+## TTS Direction Rules
+
+Each episode should include a provider-ready director prompt. Write it in natural Chinese so TTS providers such as MiMo can use it directly.
+
+Include:
+
+- Voice type: male/female, age feel, texture, narration style.
+- Tempo: slow, medium, slightly fast, with approximate intent rather than numbers when possible.
+- Emotional curve: where to suppress, build, pause, or release.
+- Emphasis: 2-4 key words or sentences.
+- Ending: whether to drop voice, suspend, hard stop, or leave suspense.
+
+Good example:
+
+```text
+TTS导演提示：用沉稳中低音男声讲述，语速中等略慢。前半段像刚醒来一样压低、疑惑；看到日期后明显放慢；读到“二零零二年五月二十九日”时加重并停顿；结尾保留震惊和悬念，不要热血。
+```
+
+Bad example:
+
+```text
+TTS：男声，正常读。
+```
 
 ## Do Not Include Unless Asked
 

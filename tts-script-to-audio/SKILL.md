@@ -27,6 +27,7 @@ If the user has `MIMO_API_KEY` configured, prefer Xiaomi MiMo for Chinese novel 
    - Preserve episode titles and order.
    - If the text came from `novel-to-tts-script`, keep its episode structure.
    - Extract only text under `口播稿` or equivalent spoken-script sections.
+   - Extract `TTS导演提示`, `TTS direction`, or equivalent style blocks and preserve them per episode.
    - Discard `标题`, `封面字`, `背景视频`, `字幕`, `发布测试`, and analysis blocks unless explicitly requested.
 
 2. Clean for speech.
@@ -96,7 +97,7 @@ Use simple, repeatable voice settings:
 
 - Xiaomi MiMo V2.5 TTS:
   - Use model `mimo-v2.5-tts` for preset voices.
-  - Put style/director instructions in the `user` message.
+  - Put the episode's style/director instructions in the `user` message.
   - Put the exact narration text in the `assistant` message.
   - Use Chinese preset voices such as `苏打`, `白桦`, `冰糖`, or `茉莉`.
   - Use natural-language style prompts for global emotion/pacing, and inline audio tags only when the user wants fine control.

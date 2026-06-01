@@ -11,6 +11,7 @@ import base64
 import csv
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -25,6 +26,36 @@ DEFAULT_STYLE = (
     "用适合小说口播的沉稳叙事男声来读。语速中等略慢，咬字清楚，"
     "前半段压住情绪，关键反转前稍作停顿，结尾保留悬念感。"
 )
+
+STYLE_HEADING_RE = re.compile(r"^TTS(?:导演提示|方向|指令)?[：:]\s*(.+)$", re.M)
+EPISODE_HEADING_RE = re.compile(r"^#{1,6}\s*第\s*(\d+|[一二三四五六七八九十百]+)\s*集[：:：\s]*(.*)$", re.M)
+
+
+def chinese_num_to_int(value: str) -> int:
+    if value.isdigit():
+        return int(value)
+    digits = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+    if value == "十":
+        return 10
+    if "十" in value:
+        left, _, right = value.partition("十")
+        tens = digits.get(left, 1) if left else 1
+        ones = digits.get(right, 0) if right else 0
+        return tens * 10 + ones
+    return digits.get(value, 1)
+
+
+def extract_episode_styles(text: str) -> dict[int, str]:
+    matches = list(EPISODE_HEADING_RE.finditer(text))
+    styles: dict[int, str] = {}
+    for i, match in enumerate(matches):
+        start = match.end()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        body = text[start:end]
+        style_match = STYLE_HEADING_RE.search(body)
+        if style_match:
+            styles[chinese_num_to_int(match.group(1))] = style_match.group(1).strip()
+    return styles
 
 
 def prepare_segments(input_path: Path, out_dir: Path, series: str, target_chars: int) -> Path:
@@ -106,6 +137,8 @@ def main() -> None:
     input_path = Path(args.input)
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    source_text = input_path.read_text(encoding="utf-8")
+    episode_styles = extract_episode_styles(source_text)
 
     csv_path = prepare_segments(input_path, out_dir, args.series, args.target_chars)
 
@@ -116,7 +149,9 @@ def main() -> None:
             filename = Path(row["filename"]).with_suffix(f".{args.format}").name
             out_path = out_dir / filename
             text = row["text"].replace("\r\n", "\n").strip()
-            audio = call_mimo(api_key, text, args.style, args.voice, args.model, args.format)
+            episode_number = int(row.get("episode") or 1)
+            style = episode_styles.get(episode_number, args.style)
+            audio = call_mimo(api_key, text, style, args.voice, args.model, args.format)
             out_path.write_bytes(audio)
             generated.append(out_path)
             print(f"wrote={out_path}")
