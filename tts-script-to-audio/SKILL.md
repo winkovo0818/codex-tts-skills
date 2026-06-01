@@ -14,10 +14,11 @@ Convert finished narration scripts into actual TTS audio whenever possible. This
 Choose the simplest production path that fits the user's scale:
 
 - Jianying/CapCut manual flow: use for early testing, low volume, no code, fastest Douyin publishing.
+- Xiaomi MiMo V2.5 TTS: use for novel口播 when the user wants controllable emotion, pacing, style, and preset Chinese voices through API.
 - Volcengine or other API flow: use for batch production, recurring series, multiple accounts, or automation.
 - MiniMax/Fish Audio/ElevenLabs style flow: use when the user prioritizes emotional acting, character voice consistency, or voice cloning with authorized voices.
 
-If the user has no provider preference, generate WAV files with local Windows TTS first. Use provider-neutral segment files only as an intermediate artifact, not the final deliverable.
+If the user has `MIMO_API_KEY` configured, prefer Xiaomi MiMo for Chinese novel narration. Otherwise generate WAV files with local Windows TTS first. Use provider-neutral segment files only as an intermediate artifact, not the final deliverable.
 
 ## Workflow
 
@@ -93,6 +94,12 @@ Use simple, repeatable voice settings:
 
 ## Provider Notes
 
+- Xiaomi MiMo V2.5 TTS:
+  - Use model `mimo-v2.5-tts` for preset voices.
+  - Put style/director instructions in the `user` message.
+  - Put the exact narration text in the `assistant` message.
+  - Use Chinese preset voices such as `苏打`, `白桦`, `冰糖`, or `茉莉`.
+  - Use natural-language style prompts for global emotion/pacing, and inline audio tags only when the user wants fine control.
 - Jianying/CapCut: deliver clean text chunks and manual steps. Avoid SSML; use visible pause markers sparingly or replace with punctuation.
 - Volcengine/API TTS: deliver JSON/CSV-style segment sheet, filenames, voice parameters, and retry notes.
 - MiniMax/Fish/ElevenLabs: include style prompts and consistency notes. Use only authorized/cloned voices.
@@ -100,9 +107,16 @@ Use simple, repeatable voice settings:
 
 ## Useful Scripts
 
-Use `scripts/synthesize_windows_tts.ps1` to generate WAV audio locally from a TTS-only script. It calls `prepare_tts_segments.py` internally.
+Use `scripts/synthesize_mimo_tts.py` to generate audio with Xiaomi MiMo when `MIMO_API_KEY` is available.
 
 Example:
+
+```powershell
+$env:MIMO_API_KEY="your_api_key"
+python scripts/synthesize_mimo_tts.py input.md --out-dir output_audio --series mynovel --voice 白桦 --format wav
+```
+
+Use `scripts/synthesize_windows_tts.ps1` to generate WAV audio locally from a TTS-only script when no API provider is configured. It calls `prepare_tts_segments.py` internally.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/synthesize_windows_tts.ps1 -InputPath input.md -OutDir output_audio -Series mynovel -VoiceName "Microsoft Kangkang" -Rate -1

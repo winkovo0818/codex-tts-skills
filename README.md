@@ -48,6 +48,7 @@ Use it after `novel-to-tts-script` when you want Codex to:
 - split long narration into manageable audio segments;
 - generate stable filenames;
 - produce local WAV files with Windows TTS when no external provider is configured;
+- generate MiMo V2.5 TTS audio when `MIMO_API_KEY` is configured;
 - prepare provider-ready payloads when using an API TTS provider.
 
 Example prompt:
@@ -77,7 +78,33 @@ Expected final layout:
 
 Restart Codex or start a new thread after installing so the skills can be discovered.
 
-## Local Audio Generation
+## Xiaomi MiMo TTS Generation
+
+`tts-script-to-audio` includes a Xiaomi MiMo V2.5 TTS helper:
+
+```text
+tts-script-to-audio/scripts/synthesize_mimo_tts.py
+```
+
+It follows MiMo's chat-style TTS pattern:
+
+- style/director prompt goes in the `user` message;
+- exact narration text goes in the `assistant` message;
+- preset voices include Chinese voices such as `苏打`, `白桦`, `冰糖`, and `茉莉`.
+
+Example:
+
+```powershell
+$env:MIMO_API_KEY="your_api_key"
+python .\tts-script-to-audio\scripts\synthesize_mimo_tts.py .\chapter01_tts.md `
+  --out-dir .\audio `
+  --series guozu2002 `
+  --voice 白桦 `
+  --format wav `
+  --style "用沉稳、有压迫感的男声进行小说口播。语速中等略慢，关键反转前停顿，结尾保留悬念。"
+```
+
+## Local Windows Audio Generation
 
 `tts-script-to-audio` includes a Windows TTS helper:
 
@@ -127,5 +154,6 @@ tts-script-to-audio/
   agents/openai.yaml
   references/tts-qa.md
   scripts/prepare_tts_segments.py
+  scripts/synthesize_mimo_tts.py
   scripts/synthesize_windows_tts.ps1
 ```
